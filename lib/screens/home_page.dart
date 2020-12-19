@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:car_tracker_flutter/models/user.dart';
+import 'package:car_tracker_flutter/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -9,6 +11,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  UserService _userService = UserService();
+
   Location location = Location();
 
   static LatLng _initialPosition = LatLng(23.8103, 90.4125);
@@ -21,6 +25,11 @@ class _HomePageState extends State<HomePage> {
   BitmapDescriptor carIcon;
   Set<Marker> markers = Set();
 
+  Future<User> getUser() async {
+    var user = await _userService.getUser();
+    return user;
+  }
+
   Future<void> _goToCurrentLocation() async {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(
@@ -31,6 +40,39 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  void openDialog(User user) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            insetPadding: EdgeInsets.only(top: 160),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+            elevation: 16,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                height: 80,
+                child: Column(
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: NetworkImage(user.data.avatar),
+                    ),
+                    Text(
+                      '${user.data.firstName} ${user.data.lastName}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(user.data.email),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
   }
 
   @override
@@ -61,10 +103,11 @@ class _HomePageState extends State<HomePage> {
         icon: carIcon,
         flat: true,
         rotation: _direction,
-        infoWindow: InfoWindow(
-          title: 'Car',
-          snippet: 'Lorem ipsum',
-        ),
+        onTap: () {
+          getUser().then((value) {
+            openDialog(value);
+          });
+        },
       )
     ]);
     return Scaffold(
