@@ -1,9 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="xyz.smj.car_tracker_flutter">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
     <application
-        android:icon="@mipmap/ic_launcher"
-        android:label="car_tracker_flutter">
+        android:icon="@drawable/car_icon"
+        android:label="Car Tracker">
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
@@ -26,9 +30,7 @@
             <meta-data
                 android:name="io.flutter.embedding.android.SplashScreenDrawable"
                 android:resource="@drawable/launch_background" />
-            <meta-data
-                android:name="com.google.android.geo.API_KEY"
-                android:value="AIzaSyBnDEB0jEdhWffnW4mWgy99lifHc2SWcok" />
+
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,5 +42,8 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBnDEB0jEdhWffnW4mWgy99lifHc2SWcok" />
     </application>
 </manifest>
